@@ -22,6 +22,23 @@ function TodoList() {
     setTodos(todos => [...todos, newTodo]);
   }
 
+  // Function that will be passed into Todo update a todo
+  const updateTodo = (targetTodo) => {
+    setTodos(todos => {
+      let oldTodos = [...todos];
+      const updatedTodos = oldTodos.map(todo => {
+        if (todo.id === targetTodo.id) {
+          // id should remain the same
+          return {...todo, text: targetTodo.text}
+        } else {
+          return {...todo};
+        }
+      });
+      // dont need to make new var
+      return updatedTodos;
+    })
+  }
+
   // Function that will be passed into Todo to delete Todo and update the todos state
   const removeTodo = (deleteId) => {
     setTodos(todos => {
@@ -34,13 +51,13 @@ function TodoList() {
   }
 
   // Function that will be update List showing all todos
-  const renderBoxes = () => {
+  const renderTodos = () => {
     return (
       <div className="todolist">
       {todos.map(todo => (
         // <div key={todo.id}> // this would have worked, but no reason to, you can have it on Todo component
         // key has to go on what i map through
-          <Todo key={todo.id} id={todo.id} text={todo.text} removeTodo={removeTodo}/>
+          <Todo key={todo.id} id={todo.id} text={todo.text} removeTodo={removeTodo} updateTodo={updateTodo}/>
         // </div>
       ))}
       </div>
@@ -51,7 +68,7 @@ function TodoList() {
     <div className="todoApp">
       <h2>Todo App</h2>
       {<NewTodoForm addTodo={addTodo} />}
-      {renderBoxes()}
+      {renderTodos()}
     </div>
   )
 }
